@@ -21,7 +21,6 @@ function funcs=set_funcs(varargin)
 %   'sys_tau',@()1,'x_vectorized', true, 'p_vectorized',true)
 % is the same but has vectorization (will be faster, especially for
 % periodic orbits)
-%
 %% Process options
 defaults={...
     'sys_rhs',[],...             % user-defined r.h.s.
@@ -108,7 +107,7 @@ end
 isvec=[funcs.x_vectorized,funcs.p_vectorized];
 [xfdims,xtaudims,pdims]=deal(2+double(funcs.delayed_derivs>0),2,2);
 if isempty(funcs.wrap_rhs)
-    funcs.wrap_rhs = @(x,p)fun_vec(funcs.sys_rhs,{1,[xfdims,pdims]},isvec,get_nf(funcs,x),x,p);
+    funcs.wrap_rhs = @(x,p)fun_vec(funcs.sys_rhs,{1,[xfdims,pdims]},isvec,size(funcs.lhs_matrixfun(size(x,1)),1),x,p);
 end
 %% sys_dirderi not provided but sys_deri
 if ~isempty(funcs.sys_deri) 
@@ -126,7 +125,7 @@ if sys_rhs_cell && ~isempty(funcs.sys_dirderi)
     end
 end
 if isempty(funcs.wrap_dirderi) && ~isempty(funcs.sys_dirderi)
-    vecrhs=@(f){@(x,p,dx,dp)fun_vec(f,[xfdims,pdims,xfdims,pdims],[isvec,isvec],get_nf(funcs,x),x,p,dx,dp)};
+    vecrhs=@(f){@(x,p,dx,dp)fun_vec(f,[xfdims,pdims,xfdims,pdims],[isvec,isvec],size(funcs.lhs_matrixfun(size(x,1)),1),x,p,dx,dp)};
     funcs.wrap_dirderi = cellfun(vecrhs,funcs.sys_dirderi);
 end
 %% create mixed higher-order, full and single-directional derivatives of rhs
@@ -188,7 +187,7 @@ if sys_rhs_cell && ~isempty(funcs.sys_dirdtau)
 end
 if isempty(funcs.wrap_dirdtau) && ~isempty(funcs.sys_dirdtau)
     vectau=@(f){@(it,x,p,dx,dp)fun_vec(@(xa,pa,dxa,dpa)f(it,xa,pa,dxa,dpa),...
-        [xtaudims,pdims,xtaudims,pdims],[isvec,isvec],get_nf(funcs,x),x,p,dx,dp)};
+        [xtaudims,pdims,xtaudims,pdims],[isvec,isvec],size(funcs.lhs_matrixfun(size(x,1)),1),x,p,dx,dp)};
     funcs.wrap_dirdtau =cellfun(vectau,funcs.sys_dirdtau);
 end
 funcs=loc_funcs_add_mfderiv(funcs,'tau');
@@ -235,10 +234,6 @@ function funcs=loc_check_add(funcs,fname,value)
 if ~isfield(funcs,fname) || isempty(funcs.(fname))
    funcs.(fname)=value;
 end
-end
-%%
-function nf=get_nf(funcs,x)
-nf=size(funcs.lhs_matrixfun(size(x,1)),1);
 end
 %%
 function tau=loc_taufunc(order,it,xx,p,dp,itau) %#ok<INUSL>
