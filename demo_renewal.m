@@ -25,7 +25,7 @@
 % The demo has the parameters |gamma|, |tau1|, |tau2|, |tau3| and (for the DDE version) |beta|.
 %% Load DDE-Biftool and extension into Path
 clear
-ddebiftool_path([getenv('HOME'),'/sourceforge-ddebiftool/releases/git-2023-06-27']);
+ddebiftool_path([pwd(),'/ddebiftool_25_03_07']);
 %% Renewal equation: x(t)=tau1*gamma/2 * y(t-tau2)
 % enable derivatives by uncommenting for more accurate normal form
 % computation and improved convergence along bifurcation curves

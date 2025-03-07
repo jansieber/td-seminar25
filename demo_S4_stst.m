@@ -3,8 +3,7 @@
 %
 %%
 clear
-ddebiftool_path([getenv('HOME'),'/sourceforge-ddebiftool/releases/git-2023-06-27'])
-%ddebiftool_path([pwd(),'/ddebiftool-snapshot-2025-02-07']);
+ddebiftool_path([pwd(),'/ddebiftool_25_03_07']);
 format compact
 format short g
 %% Define system of equations of 4 coupled scalar oscillators

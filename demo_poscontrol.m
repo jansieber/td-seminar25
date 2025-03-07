@@ -1,6 +1,6 @@
 %% Demos for TDS25 seminar
 clear
-ddebiftool_path([getenv('HOME'),'/sourceforge-ddebiftool/releases/git-2023-06-27'])
+ddebiftool_path([pwd(),'/ddebiftool_25_03_07']);
 %% Define system and 1st derivative
 f=@(x,s,xref,tau0,k,c)[...
     k.*xref-k.*s(2,:).*c/2;...      %delays: tau0, s0=s(t)

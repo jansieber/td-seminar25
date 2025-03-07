@@ -1,5 +1,5 @@
-ddebiftool_path([getenv('HOME'),'/sourceforge-ddebiftool/releases/git-2023-06-27'])
-%ddebiftool_path([pwd(),'/ddebiftool-snapshot-2025-02-07']);
+%% Plot periodic orbits of coupled-oscillator demo
+ddebiftool_path([pwd(),'/ddebiftool_25_03_07']);
 format compact
 format short g
 load('S4_demo_psol_results.mat');
